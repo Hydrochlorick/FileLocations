@@ -37,11 +37,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
               if let data = contents,
               let jsonResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String:Any]] {
                 for film in jsonResult{
-                    let firstActor = film["actor_1"] as? String ?? ""
-                    let locations = film["locations"] as? String  ?? ""
-                    let releaseYear = film["release_year"] as? String  ?? ""
-                    let title = film["title"] as? String  ?? ""
-                    let movie = FilmEntry(firstActor: firstActor, locations: locations, releaseYear: releaseYear, title: title)
+//                    let firstActor = film["actor_1"] as? String ?? ""
+//                    let locations = film["locations"] as? String  ?? ""
+//                    let releaseYear = film["release_year"] as? String  ?? ""
+//                    let title = film["title"] as? String  ?? ""
+//                    let movie = FilmEntry(firstActor: firstActor, locations: locations, releaseYear: releaseYear, title: title)
+                    
+                    // This doesn't work. TODO: Figure out why.
+                    guard let movie = FilmEntry(json: film) else { return }
                     films.append(movie)
                 }
               }
