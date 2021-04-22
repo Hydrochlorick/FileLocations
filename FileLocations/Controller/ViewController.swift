@@ -9,7 +9,7 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    var films: [FilmEntry] = []
+    var films: [FilmEntryCodable] = []
     
     let filmsTable = UITableView()
 
@@ -30,26 +30,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let path = Bundle.main.path(forResource: fileName, ofType: ".json")
         if let path = path {
             let url = URL(fileURLWithPath: path)
-            print(url)
-            
             let contents = try? Data(contentsOf: url)
-            do {
-              if let data = contents,
-              let jsonResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String:Any]] {
-                for film in jsonResult{
-//                    let firstActor = film["actor_1"] as? String ?? ""
-//                    let locations = film["locations"] as? String  ?? ""
-//                    let releaseYear = film["release_year"] as? String  ?? ""
-//                    let title = film["title"] as? String  ?? ""
-//                    let movie = FilmEntry(firstActor: firstActor, locations: locations, releaseYear: releaseYear, title: title)
-                    
-                    // This doesn't work. TODO: Figure out why.
-                    guard let movie = FilmEntry(json: film) else { return }
-                    films.append(movie)
+            if let data = contents {
+                let decoder = JSONDecoder()
+                decoder.keyDecodingStrategy = .convertFromSnakeCase
+                do {
+                    let filmsFromJSON = try decoder.decode([FilmEntryCodable].self, from: data)
+                    films = filmsFromJSON
+                    filmsTable.reloadData()
+                } catch {
+                    print("He's dead, Jim")
                 }
-              }
-            } catch {
-              print("Error deserializing JSON: \(error)")
             }
         }
     }
