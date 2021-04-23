@@ -63,7 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = films[indexPath.row].title
+        cell.textLabel?.text = "\(films[indexPath.row].title) \(films[indexPath.row].releaseYear.value)"
         return cell
     }
 
